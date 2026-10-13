@@ -1,0 +1,1019 @@
+<meta charset="utf-8">
+<title>Nostalgia</title>
+<meta name="description" content="Nostalgia: a Wrapped-style recap of your trip photos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: a quiet departures-hall frame around one phone-sized story stage.
+   The stage never uses these tokens for its colours: each trip paints it from its own photos. */
+:root{
+  --bg:#E8ECF1;
+  --surface:#FFFFFF;
+  --ink:#10141A;
+  --muted:#556070;
+  --line:#CBD3DD;
+  --airmail-blue:#2142C9;
+  --airmail-red:#D33F2A;
+  --tag:#F1E2B6;
+  --tag-ink:#2A2213;
+  --display:"Big Shoulders Display","Arial Narrow","Roboto Condensed",Impact,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C0F14; --surface:#151A22; --ink:#ECEFF4; --muted:#9AA4B4; --line:#262F3B;
+    --airmail-blue:#7D95FF; --airmail-red:#FF6E59; --tag:#F1E2B6; --tag-ink:#2A2213;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C0F14; --surface:#151A22; --ink:#ECEFF4; --muted:#9AA4B4; --line:#262F3B;
+  --airmail-blue:#7D95FF; --airmail-red:#FF6E59; --tag:#F1E2B6; --tag-ink:#2A2213;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;margin:0;-webkit-font-smoothing:antialiased}
+.sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid var(--airmail-blue);outline-offset:3px;border-radius:6px}
+
+/* ---------- page chrome ---------- */
+.airmail{height:6px;background:repeating-linear-gradient(-45deg,var(--airmail-red) 0 14px,transparent 14px 22px,var(--airmail-blue) 22px 36px,transparent 36px 44px)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px clamp(16px,4vw,40px) 0;max-width:1180px;margin:0 auto}
+.wordmark{font-family:var(--display);font-weight:900;font-size:30px;letter-spacing:.01em;line-height:1}
+.wordmark b{color:var(--airmail-red)}
+.top .mono-note{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.home{max-width:1180px;margin:0 auto;padding:clamp(20px,4vw,48px) clamp(16px,4vw,40px) 48px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(24px,5vw,72px);align-items:center}
+.pitch{min-width:0;display:flex;flex-direction:column;gap:22px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+h1{margin:0;line-height:.86;text-wrap:balance}
+h1 .d{display:block;font-family:var(--display);font-weight:900;font-size:clamp(64px,11vw,136px);text-transform:uppercase;letter-spacing:-.005em}
+h1 .s{display:block;font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(58px,10vw,124px);letter-spacing:-.01em;color:var(--airmail-blue)}
+.lede{margin:0;max-width:34em;font-size:18px;color:var(--muted)}
+.lede strong{color:var(--ink);font-weight:600}
+.controls{display:flex;flex-direction:column;gap:12px;max-width:440px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.field input{font:500 18px/1.2 var(--sans);color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;min-height:52px}
+.field input:focus{border-color:var(--airmail-blue);outline:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 22px;border-radius:999px;font:600 17px/1 var(--sans);cursor:pointer;border:1.5px solid transparent;text-decoration:none;transition:transform .15s ease,background-color .15s ease}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--ink);color:var(--bg)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--ink)}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px}
+.btn-row .btn{flex:1 1 180px}
+.fine{margin:2px 0 0;font-size:14px;color:var(--muted);max-width:34em}
+.fine b{color:var(--ink);font-weight:600}
+.error{margin:0;padding:12px 14px;border-radius:12px;background:color-mix(in srgb,var(--airmail-red) 12%,transparent);color:var(--ink);font-size:15px}
+.stage-wrap{min-width:0;display:flex;flex-direction:column;align-items:center;gap:12px}
+.stage-wrap .cap{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center}
+.preview-btn{all:unset;cursor:pointer;display:block;border-radius:30px;position:relative}
+.preview-btn:focus-visible{outline:3px solid var(--airmail-blue);outline-offset:4px}
+.preview-btn .playhint{position:absolute;right:16px;top:16px;z-index:5;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,.92);color:#111;font:600 14px/1 var(--sans);box-shadow:0 6px 24px rgba(0,0,0,.25);white-space:nowrap}
+.preview-btn .playhint i{width:0;height:0;border-left:9px solid #111;border-top:6px solid transparent;border-bottom:6px solid transparent}
+.how{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,40px) 64px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.how div{border-top:1.5px solid var(--ink);padding-top:12px;min-width:0}
+.how h2{margin:0 0 4px;font:800 22px/1.1 var(--display);text-transform:uppercase;letter-spacing:.02em}
+.how p{margin:0;color:var(--muted);font-size:15px}
+@media (max-width:860px){
+  .home{grid-template-columns:minmax(0,1fr)}
+  .stage-wrap{order:2}
+  .how{grid-template-columns:minmax(0,1fr)}
+}
+
+/* ---------- the phone stage ---------- */
+.phone{position:relative;container-type:size;width:min(360px,72vw);aspect-ratio:9/16;max-height:78vh;border-radius:30px;overflow:hidden;background:var(--s-deep1,#151a22);color:var(--s-ink,#fff);box-shadow:0 30px 80px -20px rgba(10,20,40,.45),0 0 0 1px rgba(0,0,0,.06);isolation:isolate;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+.stage-wrap .phone{max-height:none;height:auto}
+.player{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(6,8,12,.88);padding:max(12px,env(safe-area-inset-top,0px)) 12px max(12px,env(safe-area-inset-bottom,0px))}
+.player .phone{width:auto;height:min(92vh,880px);max-height:none}
+@media (max-width:560px){
+  .player{padding:0;background:#000}
+  .player .phone{width:100%;height:100%;border-radius:0;aspect-ratio:auto}
+}
+.grain{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.14;mix-blend-mode:overlay;background-size:180px 180px}
+.bars{position:absolute;z-index:6;left:0;right:0;top:0;display:flex;gap:4px;padding:calc(env(safe-area-inset-top,0px) + 12px) 12px 0}
+.bars span{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.28);overflow:hidden}
+.bars span i{display:block;height:100%;width:0;background:#fff}
+.bars span.done i{width:100%}
+.bars span.on i{animation:fill var(--dur,6s) linear forwards}
+.player.paused .bars span.on i{animation-play-state:paused}
+@keyframes fill{to{width:100%}}
+.chrome{position:absolute;z-index:7;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 24px) 12px 0 14px;pointer-events:none}
+.chip{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:5px 8px;border-radius:6px;background:rgba(0,0,0,.35);color:#fff;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.closeb:focus-visible{outline-color:#fff}
+.closeb{pointer-events:auto;width:44px;height:44px;border-radius:50%;border:0;background:rgba(0,0,0,.35);color:#fff;font:400 26px/1 var(--sans);cursor:pointer;display:grid;place-items:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.pausemark{position:absolute;z-index:7;inset:0;display:none;place-items:center;pointer-events:none}
+.player.paused .pausemark{display:grid}
+.pausemark span{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;background:rgba(0,0,0,.5);color:#fff;padding:8px 12px;border-radius:8px}
+
+/* cards */
+.card{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;padding:16cqh 8cqw 9cqh;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s linear .45s;overflow:hidden}
+.card.on{opacity:1;visibility:visible;transition:opacity .45s ease,visibility 0s}
+.card[data-tone="deep"]{background:radial-gradient(120% 70% at 85% 0%,color-mix(in srgb,var(--s-pop) 38%,transparent),transparent 60%),radial-gradient(90% 60% at 0% 100%,color-mix(in srgb,var(--s-pop2) 30%,transparent),transparent 62%),linear-gradient(170deg,var(--s-deep2),var(--s-deep1));color:#fff}
+.card[data-tone="pop"]{background:radial-gradient(90% 60% at 100% 100%,color-mix(in srgb,var(--s-pop2) 55%,transparent),transparent 70%),var(--s-pop);color:var(--s-onpop)}
+.card[data-tone="pop2"]{background:radial-gradient(90% 60% at 0% 0%,color-mix(in srgb,var(--s-pop) 50%,transparent),transparent 70%),var(--s-pop2);color:var(--s-onpop2)}
+.card[data-tone="tint"]{background:linear-gradient(180deg,var(--s-tint),color-mix(in srgb,var(--s-tint) 80%,var(--s-pop)));color:var(--s-ontint)}
+.k{font-family:var(--mono);font-weight:600;font-size:3.4cqw;letter-spacing:.14em;text-transform:uppercase;opacity:.82;margin:0}
+.huge{font-family:var(--display);font-weight:900;line-height:.82;letter-spacing:-.01em;margin:0;font-variant-numeric:tabular-nums}
+.ser{font-family:var(--serif);font-style:italic;font-weight:400;line-height:1;margin:0}
+.sub{font-size:4.1cqw;line-height:1.35;margin:0;opacity:.92;max-width:30ch}
+.mono{font-family:var(--mono)}
+.grow{flex:1;min-height:0}
+/* entrance choreography: elements rest visible; they only animate when their card turns on */
+.card.on .a{animation:rise .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d,0s)}
+.card.on .pop{animation:popin .6s cubic-bezier(.2,1.4,.3,1) both;animation-delay:var(--d,0s)}
+.player.paused .card.on .a,.player.paused .card.on .pop,.player.paused .card.on *{animation-play-state:paused}
+@keyframes rise{from{opacity:0;transform:translateY(5cqh)}to{opacity:1;transform:none}}
+@keyframes popin{from{opacity:0;transform:scale(.6) rotate(-4deg)}to{opacity:1;transform:none}}
+
+/* intro */
+.mosaic{position:absolute;inset:-18% -30%;z-index:-1;display:grid;grid-template-columns:repeat(4,1fr);gap:2.4cqw;transform:rotate(-9deg);opacity:.55}
+.mosaic img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:2.4cqw;display:block}
+.card.on .mosaic{animation:drift 22s linear infinite alternate}
+@keyframes drift{from{transform:rotate(-9deg) translateY(0)}to{transform:rotate(-9deg) translateY(-14%)}}
+.intro-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,color-mix(in srgb,var(--s-deep1) 40%,transparent) 0%,color-mix(in srgb,var(--s-deep1) 70%,transparent) 45%,var(--s-deep1) 92%)}
+.c-intro .title{margin-top:auto;display:flex;flex-direction:column;gap:3cqw}
+.c-intro .huge{font-size:clamp(10px,17cqw,200px);text-transform:uppercase;overflow-wrap:anywhere}
+.c-intro .ser{font-size:19cqw;color:var(--s-pop)}
+.tagline{display:flex;flex-wrap:wrap;gap:2cqw;margin-top:4cqh}
+.tagline span{font-family:var(--mono);font-size:3.2cqw;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:1.4cqw 2.4cqw;border:1px solid currentColor;border-radius:1.6cqw;opacity:.9}
+
+/* count */
+.c-count .huge{font-size:42cqw;margin-top:auto}
+.c-count .unit{font-family:var(--serif);font-style:italic;font-size:15cqw;line-height:1;margin:0 0 5cqh}
+.c-count .sub{font-size:4.6cqw}
+.c-count .vid{margin-top:3cqh;font-family:var(--mono);font-size:3.4cqw;letter-spacing:.06em;opacity:.85}
+
+/* clock */
+.clock{display:grid;place-items:center;margin:auto 0}
+.clock svg{width:80cqw;height:80cqw;overflow:visible}
+.clock .lbl{font-family:var(--mono);font-size:9px;fill:currentColor;opacity:.7}
+.clock .center-h{font-family:var(--display);font-weight:900;font-size:40px;fill:currentColor}
+.clock .center-s{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;fill:currentColor;opacity:.75}
+.card.on .clock rect.bar{animation:barin .8s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*25ms + .2s);transform-box:fill-box;transform-origin:50% 100%}
+@keyframes barin{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.clock-line{font-size:9.5cqw}
+
+/* burst */
+.fan{position:relative;height:38cqh;margin:3cqh 0 2cqh}
+.fan img{position:absolute;left:50%;top:50%;width:40cqw;aspect-ratio:4/5;object-fit:cover;border-radius:2.4cqw;border:1.4cqw solid #fff;box-shadow:0 2cqw 6cqw rgba(0,0,0,.4);transform:translate(-50%,-50%) translate(var(--x),var(--y)) rotate(var(--r))}
+.card.on .fan img{animation:deal .5s cubic-bezier(.2,.9,.3,1.2) both;animation-delay:calc(var(--i)*90ms + .35s)}
+@keyframes deal{from{opacity:0;transform:translate(-50%,-50%) translate(0,30cqh) rotate(0)}to{opacity:1}}
+.c-burst .huge{font-size:19cqw}
+.c-burst .ser{font-size:9cqw}
+.stamp{font-family:var(--mono);font-size:3.3cqw;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin:2.4cqh 0 1.6cqh;opacity:.9}
+
+/* colours */
+.palbar{display:flex;height:11cqh;border-radius:3cqw;overflow:hidden;margin:4cqh 0 3cqh;box-shadow:0 0 0 1px rgba(255,255,255,.18)}
+.palbar i{display:block;height:100%}
+.card.on .palbar i{animation:widen 1s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*120ms + .3s);transform-origin:0 50%}
+@keyframes widen{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.pal-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.6cqh}
+.pal-list li{display:grid;grid-template-columns:7cqw 1fr auto;align-items:center;gap:3cqw}
+.pal-list .sw{width:7cqw;height:7cqw;border-radius:50%;box-shadow:0 0 0 1px rgba(255,255,255,.35)}
+.pal-list .nm{font-family:var(--display);font-weight:800;font-size:8.6cqw;text-transform:uppercase;line-height:1}
+.pal-list .pc{font-family:var(--mono);font-size:4.2cqw;font-weight:600;font-variant-numeric:tabular-nums}
+
+/* route */
+.route svg{width:100%;height:42cqh;margin:3cqh 0;overflow:visible}
+.route path{fill:none;stroke:var(--s-pop);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:var(--len);stroke-dashoffset:0}
+.card.on .route path{animation:draw 2.4s cubic-bezier(.4,0,.2,1) both .3s}
+@keyframes draw{from{stroke-dashoffset:var(--len)}to{stroke-dashoffset:0}}
+.route circle{fill:#fff}
+.route .huge{font-size:24cqw}
+
+/* days */
+.days{list-style:none;margin:4cqh 0 0;padding:0;display:flex;flex-direction:column;gap:1.8cqh}
+.days li{display:grid;grid-template-columns:12cqw minmax(0,1fr) auto;align-items:center;gap:3cqw}
+.days img{width:12cqw;height:12cqw;object-fit:cover;border-radius:2cqw;display:block}
+.days .lab{font-family:var(--mono);font-size:3.2cqw;font-weight:600;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:.8cqh}
+.days .track{height:2.2cqw;border-radius:2cqw;background:color-mix(in srgb,currentColor 14%,transparent);overflow:hidden}
+.days .track i{display:block;height:100%;border-radius:2cqw;background:currentColor;opacity:.55;width:var(--w)}
+.days li.big .track i{opacity:1;background:var(--s-pop)}
+.card.on .days .track i{animation:widen .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*110ms + .3s);transform-origin:0 50%}
+.days .n{font-family:var(--display);font-weight:800;font-size:9cqw;font-variant-numeric:tabular-nums}
+.days-foot{margin-top:auto;font-size:8.5cqw}
+
+/* top 5 */
+.top5{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:auto auto;gap:2.2cqw;margin-top:3cqh}
+.top5 figure{margin:0;position:relative}
+.top5 img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:2.4cqw;display:block}
+.top5 .one{grid-column:1/-1}
+.top5 .one img{aspect-ratio:4/4.1;border-radius:3cqw}
+.top5 figcaption{position:absolute;left:1.6cqw;top:1.6cqw;font-family:var(--display);font-weight:900;font-size:6.2cqw;line-height:1;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.55)}
+.top5 .one figcaption{font-size:11cqw;left:3cqw;top:2.4cqw}
+.top5 .one .theone{position:absolute;right:3cqw;bottom:2.6cqw;font-family:var(--serif);font-style:italic;font-size:9cqw;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.6)}
+.top5 .fr{position:absolute;left:3cqw;bottom:2.8cqw;font-family:var(--mono);font-size:2.9cqw;letter-spacing:.1em;color:#fff;opacity:.9;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.top5 .one{order:2}
+.top5 .rest{order:1}
+.top5-note{margin-top:auto}
+
+/* outtake */
+.c-outtake .shot{margin:4cqh auto 0;width:74cqw;transform:rotate(-3deg);background:#fff;padding:3cqw 3cqw 12cqw;border-radius:1.2cqw;box-shadow:0 3cqw 9cqw rgba(0,0,0,.35);position:relative}
+.c-outtake .shot img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+.c-outtake .shot span{position:absolute;left:0;right:0;bottom:3cqw;text-align:center;font-family:var(--serif);font-style:italic;font-size:6.4cqw;color:#222}
+.c-outtake .ser{font-size:11cqw;margin-top:auto}
+
+/* cull */
+.c-cull .huge{font-size:21cqw;text-transform:uppercase}
+.stack{display:flex;flex-direction:column;gap:2.4cqh;margin:5cqh 0 0}
+.stack .row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2cqw;align-items:end}
+.stack .row b{font-family:var(--display);font-weight:800;font-size:8cqw;text-transform:uppercase;line-height:1}
+.stack .row span{font-family:var(--mono);font-weight:600;font-size:4.4cqw;font-variant-numeric:tabular-nums}
+.stack .meter{grid-column:1/-1;height:2.6cqw;border-radius:2cqw;background:color-mix(in srgb,currentColor 14%,transparent);overflow:hidden}
+.stack .meter i{display:block;height:100%;width:var(--w);background:currentColor;border-radius:2cqw}
+.stack .row.keep .meter i{background:var(--s-pop)}
+.card.on .stack .meter i{animation:widen .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*140ms + .35s);transform-origin:0 50%}
+
+/* personality */
+.c-persona .huge{font-size:17cqw;text-transform:uppercase;margin-top:auto;overflow-wrap:anywhere}
+.c-persona .ser{font-size:10cqw;margin:4cqh 0 2cqh}
+.chips{display:flex;flex-wrap:wrap;gap:2cqw;margin-top:4cqh}
+.chips span{font-family:var(--mono);font-weight:600;font-size:3.2cqw;letter-spacing:.06em;padding:1.6cqw 2.6cqw;border-radius:99px;background:color-mix(in srgb,currentColor 14%,transparent)}
+
+/* summary: the baggage tag */
+.card.c-summary{padding:11cqh 8cqw 6cqh;align-items:center}
+.tag{width:100%;background:var(--s-tagpaper);color:#2A2213;border-radius:4cqw 4cqw 3cqw 3cqw;position:relative;padding:6cqw 5cqw 3.6cqw;box-shadow:0 4cqw 10cqw rgba(0,0,0,.4);clip-path:polygon(9% 0,91% 0,100% 5%,100% 100%,0 100%,0 5%)}
+.tag::before{content:"";position:absolute;left:50%;top:2.6cqw;width:5cqw;height:5cqw;margin-left:-2.5cqw;border-radius:50%;background:var(--s-deep1);box-shadow:inset 0 0 0 .8cqw rgba(0,0,0,.25)}
+.tag .row1{display:flex;justify-content:space-between;align-items:flex-end;gap:3cqw;margin-top:3cqw}
+.tag .code{font-family:var(--display);font-weight:900;font-size:15cqw;line-height:.8;letter-spacing:.02em}
+.tag .meta{font-family:var(--mono);font-size:2.8cqw;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-align:right;line-height:1.5}
+.tag .hero{margin:3cqw 0 2.6cqw;width:100%;aspect-ratio:2/1;object-fit:cover;border-radius:2cqw;display:block}
+.tag .name{font-family:var(--serif);font-style:italic;font-size:8cqw;line-height:1;margin:0 0 3cqw}
+.tag .grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1.5px dashed rgba(42,34,19,.45);border-bottom:1.5px dashed rgba(42,34,19,.45);padding:2.4cqw 0}
+.tag .grid div{display:flex;flex-direction:column;gap:.6cqw;min-width:0}
+.tag .grid small{font-family:var(--mono);font-size:2.3cqw;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.tag .grid b{font-family:var(--display);font-weight:800;font-size:6.6cqw;line-height:1;font-variant-numeric:tabular-nums}
+.tag .who{display:flex;justify-content:space-between;align-items:center;gap:3cqw;padding-top:2.6cqw}
+.tag .who b{font-family:var(--display);font-weight:800;font-size:5.6cqw;text-transform:uppercase;line-height:1}
+.tag .strip{display:flex;height:3cqw;width:30cqw;border-radius:1cqw;overflow:hidden;flex:none}
+.tag .strip i{display:block;height:100%}
+.tag .foot{margin-top:2.6cqw;display:flex;justify-content:space-between;font-family:var(--mono);font-size:2.5cqw;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.card.on .tag{animation:tagin .9s cubic-bezier(.2,1.1,.3,1) both .15s}
+@keyframes tagin{from{opacity:0;transform:translateY(8cqh) rotate(-6deg)}to{opacity:1;transform:none}}
+.endacts{width:100%;display:flex;flex-direction:column;gap:1.4cqh;margin-top:auto;padding-top:3cqh;position:relative;z-index:8}
+.endacts .btn{min-height:max(48px,12cqw);font-size:max(15px,4.2cqw);width:100%}
+.endacts .two .btn{min-height:max(44px,10cqw);font-size:max(14px,3.8cqw)}
+.endacts .btn.primary{background:#fff;color:#111}
+.endacts .btn.ghost{color:#fff;border-color:rgba(255,255,255,.4)}
+.endacts .two{display:flex;gap:2cqw}
+.endacts .two .btn{flex:1}
+.hint{font-family:var(--mono);font-size:max(11px,2.9cqw);letter-spacing:.06em;text-align:center;opacity:.7;margin:0}
+
+/* processing */
+.proc{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;padding:16cqh 7cqw 8cqh;background:#0E1218;color:#fff}
+.proc .huge{font-size:24cqw;margin-top:2cqh}
+.proc .of{font-family:var(--serif);font-style:italic;font-size:8cqw;margin:0 0 3cqh}
+.sheet{display:grid;grid-template-columns:repeat(6,1fr);gap:1.2cqw;align-content:start;flex:1;min-height:0;overflow:hidden;mask-image:linear-gradient(180deg,#000 70%,transparent)}
+.sheet img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:1cqw;display:block;animation:popin .35s ease both}
+.stage-line{font-family:var(--mono);font-size:3.3cqw;letter-spacing:.08em;text-transform:uppercase;opacity:.8;margin:2cqh 0 0}
+.live{display:flex;gap:4cqw;margin-top:1.4cqh;font-family:var(--mono);font-size:3.2cqw;opacity:.75}
+
+/* Instagram kit sheet */
+.kit{position:absolute;inset:0;z-index:9;background:#0E1218;color:#fff;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 6cqh) 6cqw 5cqh;gap:2.4cqh;overflow-y:auto}
+.kit h3{margin:0;font:900 11cqw/0.9 var(--display);text-transform:uppercase}
+.kit p{margin:0;font-size:max(13px,3.6cqw);opacity:.85}
+.kit .lab{font-family:var(--mono);font-size:max(11px,2.9cqw);font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.slides{display:flex;gap:2.4cqw;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:2cqw;-webkit-overflow-scrolling:touch}
+.slide{flex:none;width:52cqw;aspect-ratio:4/5;border-radius:2cqw;overflow:hidden;position:relative;scroll-snap-align:start;background:var(--s-deep1)}
+.slide img{width:100%;height:100%;object-fit:cover;display:block}
+.slide.cover{background:linear-gradient(170deg,var(--s-deep2),var(--s-deep1));display:flex;flex-direction:column;justify-content:flex-end;padding:4cqw}
+.slide.cover img{position:absolute;inset:0;opacity:.55}
+.slide.cover b{position:relative;font:900 9cqw/0.85 var(--display);text-transform:uppercase;overflow-wrap:anywhere}
+.slide.cover em{position:relative;font:italic 400 8cqw/1 var(--serif);color:var(--s-pop)}
+.slide.stats{background:var(--s-pop);color:var(--s-onpop);display:flex;flex-direction:column;justify-content:space-between;padding:4cqw}
+.slide.stats b{font:900 13cqw/0.85 var(--display)}
+.slide.stats span{font-family:var(--mono);font-size:2.6cqw;letter-spacing:.08em;text-transform:uppercase}
+.slide.end{background:#fff;color:#111;display:grid;place-items:center;text-align:center;padding:4cqw}
+.slide.end b{font:900 9cqw/0.9 var(--display)}
+.slide.end b i{color:#D33F2A;font-style:normal}
+.slide.end span{font-family:var(--mono);font-size:2.6cqw;letter-spacing:.1em;text-transform:uppercase;display:block;margin-top:2cqw}
+.slide .n{position:absolute;right:2cqw;top:2cqw;font-family:var(--mono);font-size:2.4cqw;background:rgba(0,0,0,.5);color:#fff;padding:.6cqw 1.4cqw;border-radius:1cqw}
+.kit ul{margin:0;padding-left:1.1em;font-size:max(13px,3.5cqw);opacity:.9;display:flex;flex-direction:column;gap:1cqh}
+.kit .btn{min-height:48px;background:#fff;color:#111;margin-top:auto}
+
+@media (prefers-reduced-motion: reduce){
+  .card.on .a,.card.on .pop,.card.on .mosaic,.card.on .tag,.card.on .fan img,.card.on .palbar i,.card.on .days .track i,.card.on .stack .meter i,.card.on .clock rect.bar,.card.on .route path,.sheet img{animation:none!important}
+  .card{transition:none}
+  .bars span.on i{animation-name:fill}
+}
+</style>
+
+<div class="airmail" aria-hidden="true"></div>
+<header class="top">
+  <div class="wordmark" aria-label="nostalgia">nostalgia<b>.</b></div>
+  <div class="mono-note">Prototype</div>
+</header>
+
+<main class="home" id="home">
+  <section class="pitch">
+    <p class="eyebrow">Your camera roll, wrapped</p>
+    <h1><span class="d">Your trip,</span><span class="s">unpacked.</span></h1>
+    <p class="lede">Pick the photos from your last trip. In about a minute you get a recap story made from them: <strong>your top 5 shots, the hour you couldn't stop shooting, your trip in colour, and your trip personality.</strong> Then post it.</p>
+    <div class="controls">
+      <div class="field">
+        <label for="tripName">Name this trip</label>
+        <input id="tripName" type="text" maxlength="28" placeholder="Goa with the gang" autocomplete="off">
+      </div>
+      <div class="btn-row">
+        <label class="btn primary" for="files" id="pickLabel">Unpack my photos</label>
+        <button class="btn ghost" id="playExample" type="button">Watch the example</button>
+      </div>
+      <input class="sr" id="files" type="file" multiple accept="image/*,video/*">
+      <p class="fine"><b>Nothing is uploaded.</b> Your photos are read on this device and stay here. Pick 20 to 400 photos from one trip. On iPhone, tap <b>Options</b> in the photo picker and turn on <b>Location</b> to add your route.</p>
+      <p class="error" id="err" hidden></p>
+    </div>
+  </section>
+  <section class="stage-wrap" aria-label="Example recap">
+    <div class="preview-btn" id="previewBtn" role="button" tabindex="0" aria-label="Watch the example recap">
+      <div class="phone" id="previewPhone"></div>
+      <span class="playhint" aria-hidden="true"><i></i>Watch the example</span>
+    </div>
+    <div class="cap">Example trip · drawn illustrations, not real photos</div>
+  </section>
+</main>
+
+<section class="how" aria-label="How it works">
+  <div><h2>Pick</h2><p>Select the whole trip from your camera roll. Duplicates and blurry shots are fine; it sorts them out.</p></div>
+  <div><h2>Unpack</h2><p>It reads when you shot, finds your bursts, ranks your best photos and mixes your trip's colours.</p></div>
+  <div><h2>Share</h2><p>A recap story for the family group, plus a ready 4:5 carousel for Instagram.</p></div>
+</section>
+
+<div class="player" id="player" hidden>
+  <div class="phone" id="phone" role="region" aria-roledescription="story" aria-label="Trip recap">
+    <div class="bars" id="bars"></div>
+    <div class="chrome"><span class="chip" id="chip">Example</span><button class="closeb" id="closeBtn" type="button" aria-label="Close recap">×</button></div>
+    <div class="pausemark"><span>Paused</span></div>
+    <div id="cards"></div>
+    <div class="grain" aria-hidden="true"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/lite.umd.js"></script>
+<script>
+(() => {
+"use strict";
+
+/* ================= helpers ================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const DOW = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
+const MON = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+const dayKey = d => d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+const h12 = h => (h % 12 === 0 ? 12 : h % 12) + (h < 12 ? " AM" : " PM");
+const hm = d => { const h = d.getHours(), m = d.getMinutes(); return (h % 12 === 0 ? 12 : h % 12) + ":" + String(m).padStart(2,"0") + (h < 12 ? " AM" : " PM"); };
+const fmtDur = s => { s = Math.round(s); const m = Math.floor(s/60), r = s % 60; return m ? m + " min " + r + " s" : r + " s"; };
+function mulberry(seed){ return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const pc32 = x => { x -= (x >>> 1) & 0x55555555; x = (x & 0x33333333) + ((x >>> 2) & 0x33333333); return (((x + (x >>> 4)) & 0x0F0F0F0F) * 0x01010101) >>> 24; };
+const ham = (a,b) => pc32(a[0]^b[0]) + pc32(a[1]^b[1]);
+const median = arr => { if (!arr.length) return 0; const s = arr.slice().sort((a,b)=>a-b); const m = s.length >> 1; return s.length % 2 ? s[m] : (s[m-1]+s[m])/2; };
+function rgbToHsl(r,g,b){ r/=255; g/=255; b/=255; const mx=Math.max(r,g,b), mn=Math.min(r,g,b); let h=0,s=0; const l=(mx+mn)/2; if(mx!==mn){ const d=mx-mn; s=l>.5?d/(2-mx-mn):d/(mx+mn); h = mx===r ? (g-b)/d+(g<b?6:0) : mx===g ? (b-r)/d+2 : (r-g)/d+4; h*=60; } return [h,s,l]; }
+function hslToRgb(h,s,l){ h=((h%360)+360)%360/360; const f = (p,q,t)=>{ if(t<0)t+=1; if(t>1)t-=1; if(t<1/6)return p+(q-p)*6*t; if(t<1/2)return q; if(t<2/3)return p+(q-p)*(2/3-t)*6; return p; }; if(s===0){ const v=Math.round(l*255); return [v,v,v]; } const q=l<.5?l*(1+s):l+s-l*s, p=2*l-q; return [f(p,q,h+1/3),f(p,q,h),f(p,q,h-1/3)].map(v=>Math.round(v*255)); }
+const hex = rgb => "#" + rgb.map(v => clamp(Math.round(v),0,255).toString(16).padStart(2,"0")).join("");
+function lum(rgb){ const c = rgb.map(v => { v/=255; return v<=.03928 ? v/12.92 : Math.pow((v+.055)/1.055,2.4); }); return .2126*c[0]+.7152*c[1]+.0722*c[2]; }
+const contrast = (a,b) => { const x=lum(a), y=lum(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05); };
+const inkOn = rgb => contrast(rgb,[255,255,255]) >= 4.5 ? "#FFFFFF" : "#14110C";
+function rgbToLab(r,g,b){ const lin = v => { v/=255; return v<=.04045 ? v/12.92 : Math.pow((v+.055)/1.055,2.4); }; const R=lin(r),G=lin(g),B=lin(b); let x=(R*.4124+G*.3576+B*.1805)/.95047, y=R*.2126+G*.7152+B*.0722, z=(R*.0193+G*.1192+B*.9505)/1.08883; const f=t=>t>.008856?Math.cbrt(t):7.787*t+16/116; x=f(x); y=f(y); z=f(z); return [116*y-16, 500*(x-y), 200*(y-z)]; }
+
+/* ================= photo analysis (all on device) ================= */
+const AN = 256;
+const work = document.createElement("canvas"); const wctx = work.getContext("2d", { willReadFrequently: true });
+const tiny = document.createElement("canvas"); tiny.width = 9; tiny.height = 8; const tctx = tiny.getContext("2d", { willReadFrequently: true });
+
+function analyzeDrawable(src, w, h){
+  const s = Math.min(1, AN / Math.max(w, h));
+  const cw = Math.max(8, Math.round(w*s)), ch = Math.max(8, Math.round(h*s));
+  work.width = cw; work.height = ch;
+  wctx.drawImage(src, 0, 0, cw, ch);
+  const d = wctx.getImageData(0, 0, cw, ch).data;
+  const n = cw*ch, g = new Float32Array(n);
+  let sL=0, sL2=0, sRG=0, sRG2=0, sYB=0, sYB2=0;
+  const samples = []; const step = Math.max(1, Math.floor(n / 72));
+  for (let i=0, p=0; i<n; i++, p+=4){
+    const r=d[p], gg=d[p+1], b=d[p+2];
+    const l = .299*r + .587*gg + .114*b; g[i]=l; sL+=l; sL2+=l*l;
+    const rg = r-gg, yb = .5*(r+gg)-b; sRG+=rg; sRG2+=rg*rg; sYB+=yb; sYB2+=yb*yb;
+    if (i % step === 0) samples.push([r,gg,b]);
+  }
+  const mean = sL/n, std = Math.sqrt(Math.max(0, sL2/n - mean*mean));
+  const mRG = sRG/n, mYB = sYB/n;
+  const colourful = Math.sqrt(Math.max(0,sRG2/n-mRG*mRG) + Math.max(0,sYB2/n-mYB*mYB)) + .3*Math.sqrt(mRG*mRG + mYB*mYB);
+  let ls=0, ls2=0, c=0;
+  for (let y=1; y<ch-1; y++) for (let x=1; x<cw-1; x++){
+    const i = y*cw+x; const v = 4*g[i]-g[i-1]-g[i+1]-g[i-cw]-g[i+cw]; ls+=v; ls2+=v*v; c++;
+  }
+  const lm = ls/c; const lap = ls2/c - lm*lm;
+  tctx.drawImage(work, 0, 0, 9, 8);
+  const t = tctx.getImageData(0,0,9,8).data; let h1=0, h2=0, bit=0;
+  for (let y=0; y<8; y++) for (let x=0; x<8; x++){
+    const a=(y*9+x)*4, b2=a+4;
+    const la=t[a]*.299+t[a+1]*.587+t[a+2]*.114, lb=t[b2]*.299+t[b2+1]*.587+t[b2+2]*.114;
+    if (la > lb){ if (bit < 32) h1 |= (1<<bit); else h2 |= (1<<(bit-32)); }
+    bit++;
+  }
+  return { mean, std, colourful, lap, hash:[h1>>>0, h2>>>0], samples, w, h };
+}
+
+function loadImg(url){ return new Promise((res, rej) => { const im = new Image(); im.decoding = "async"; im.onload = () => res(im); im.onerror = () => rej(new Error("decode")); im.src = url; }); }
+function toThumb(src, w, h, max){
+  const s = Math.min(1, max/Math.max(w,h)); const c = document.createElement("canvas");
+  c.width = Math.max(1,Math.round(w*s)); c.height = Math.max(1,Math.round(h*s));
+  c.getContext("2d").drawImage(src, 0, 0, c.width, c.height);
+  return new Promise(res => { try { c.toBlob(b => res(b ? URL.createObjectURL(b) : c.toDataURL("image/jpeg",.82)), "image/jpeg", .82); } catch(e){ res(c.toDataURL("image/jpeg",.82)); } });
+}
+function videoMeta(file){
+  return new Promise(res => {
+    let done = false; const v = document.createElement("video"); const url = URL.createObjectURL(file);
+    const fin = d => { if (done) return; done = true; URL.revokeObjectURL(url); res(d); };
+    v.preload = "metadata"; v.muted = true; v.playsInline = true;
+    v.onloadedmetadata = () => fin(isFinite(v.duration) ? v.duration : 0);
+    v.onerror = () => fin(0); setTimeout(() => fin(0), 4000); v.src = url;
+  });
+}
+async function readMeta(file){
+  if (!window.exifr) return {};
+  try { const o = await exifr.parse(file, { gps: true, tiff: true, exif: true, ifd1: false, interop: false, xmp: false, icc: false, iptc: false });
+    if (!o) return {};
+    const dt = o.DateTimeOriginal || o.CreateDate || null;
+    return { date: (dt instanceof Date && !isNaN(dt)) ? dt : null, lat: typeof o.latitude === "number" ? o.latitude : null, lng: typeof o.longitude === "number" ? o.longitude : null };
+  } catch(e){ return {}; }
+}
+
+/* ================= the report ================= */
+const PERSONAS = {
+  golden:   { name:"The Golden Hour Chaser", line:"Sunset dikha, phone nikla.", gloss:"When the light turned gold, you were already shooting." },
+  early:    { name:"The Early Riser",        line:"Sab so rahe the. Tum shoot kar rahe the.", gloss:"You had the best light to yourself." },
+  night:    { name:"The Night Owl",          line:"Raat jitni lambi, camera roll utna bhara.", gloss:"Your trip came alive after dark." },
+  burst:    { name:"Burst Mode Royalty",     line:"Ek photo? Kabhi nahi. Pachaas, haan.", gloss:"One perfect shot is easier when you take fifty." },
+  archivist:{ name:"The Archivist",          line:"Photo nahi li, toh hua hi nahi.", gloss:"If it happened, it is in your camera roll." },
+  curator:  { name:"The Curator",            line:"Kam photos. Har ek kamaal.", gloss:"Fewer photos, more keepers." },
+  colour:   { name:"The Colour Hunter",      line:"Rang dikhe, ruk gaye.", gloss:"Your camera went straight for colour." },
+  explorer: { name:"The Explorer",           line:"Ek jagah tikna mana tha.", gloss:"You kept moving, and your photos show it." },
+  story:    { name:"The Storyteller",        line:"Thoda har din. Poori kahaani.", gloss:"You shot every part of the trip, not only the highlights." }
+};
+
+function nameColour(rgb){
+  const [h,s,l] = rgbToHsl(...rgb);
+  if (l < .13) return "Midnight";
+  if (l > .9 && s < .3) return "Cloud";
+  if (s < .13) return l < .4 ? "Charcoal" : l < .72 ? "Stone" : "Mist";
+  if (h >= 14 && h < 46 && l < .42) return "Chai";
+  if (h >= 24 && h < 56 && s < .5 && l > .58) return "Sand";
+  if (h < 12 || h >= 345) return l < .45 ? "Rasam" : "Chilli";
+  if (h < 30) return "Ember";
+  if (h < 46) return "Marigold";
+  if (h < 64) return "Haldi";
+  if (h < 155) return l < .35 ? "Monsoon" : "Palm";
+  if (h < 190) return "Lagoon";
+  if (h < 215) return l > .58 ? "Sky" : "Ocean";
+  if (h < 252) return l < .38 ? "Indigo" : "Ocean";
+  if (h < 292) return "Jamun";
+  return "Gulabi";
+}
+
+function kmeansPalette(pts, k){
+  const R = mulberry(7);
+  const lab = pts.map(p => rgbToLab(p[0],p[1],p[2]));
+  const d2 = (a,b) => (a[0]-b[0])**2 + (a[1]-b[1])**2 + (a[2]-b[2])**2;
+  const C = [lab[Math.floor(R()*lab.length)].slice()];
+  while (C.length < k){
+    const dist = lab.map(p => Math.min(...C.map(c => d2(p,c)))); const sum = dist.reduce((a,b)=>a+b,0);
+    if (!sum) break; let r = R()*sum, i = 0; for (; i<lab.length; i++){ r -= dist[i]; if (r <= 0) break; }
+    C.push(lab[Math.min(i, lab.length-1)].slice());
+  }
+  const asg = new Int32Array(lab.length);
+  for (let it=0; it<14; it++){
+    const sums = C.map(()=>[0,0,0,0]);
+    for (let i=0; i<lab.length; i++){ let best=0, bd=Infinity; for (let j=0; j<C.length; j++){ const dd=d2(lab[i],C[j]); if (dd<bd){ bd=dd; best=j; } } asg[i]=best; const s=sums[best]; s[0]+=lab[i][0]; s[1]+=lab[i][1]; s[2]+=lab[i][2]; s[3]++; }
+    sums.forEach((s,j) => { if (s[3]) C[j] = [s[0]/s[3], s[1]/s[3], s[2]/s[3]]; });
+  }
+  const acc = C.map(()=>[0,0,0,0]);
+  for (let i=0; i<pts.length; i++){ const a = acc[asg[i]]; a[0]+=pts[i][0]; a[1]+=pts[i][1]; a[2]+=pts[i][2]; a[3]++; }
+  const total = pts.length;
+  let pal = acc.filter(a=>a[3]).map(a => ({ rgb:[a[0]/a[3], a[1]/a[3], a[2]/a[3]], share: a[3]/total }));
+  pal.sort((a,b) => b.share - a.share);
+  // whole-number percentages that add up to exactly 100
+  const raw = pal.map(p => p.share*100); const fl = raw.map(Math.floor); let rem = 100 - fl.reduce((a,b)=>a+b,0);
+  raw.map((v,i)=>[v-fl[i],i]).sort((a,b)=>b[0]-a[0]).forEach(([,i]) => { if (rem > 0){ fl[i]++; rem--; } });
+  const seen = {};
+  pal.forEach((p,i) => { p.pct = fl[i]; let nm = nameColour(p.rgb); if (seen[nm]){ nm = (rgbToHsl(...p.rgb)[2] < .45 ? "Deep " : "Light ") + nm; } seen[nm] = 1; p.name = nm; p.hex = hex(p.rgb); });
+  return pal;
+}
+
+function themeFrom(pal){
+  const hsl = pal.map(p => rgbToHsl(...p.rgb));
+  const vivid = i => hsl[i][1] * (1 - Math.abs(hsl[i][2] - .5)*1.4) * Math.sqrt(pal[i].share);
+  const order = pal.map((_,i)=>i).sort((a,b)=>vivid(b)-vivid(a));
+  const hueOf = i => hsl[i][1] < .12 ? 222 : hsl[i][0];
+  const satOf = i => hsl[i][1] < .12 ? .6 : hsl[i][1];
+  const domI = 0, secI = pal.length > 1 ? 1 : 0, popI = order[0], pop2I = order.find(i => i !== popI && Math.abs(hueOf(i)-hueOf(popI)) > 25) ?? (order[1] ?? order[0]);
+  const deep1 = hslToRgb(hueOf(domI), clamp(satOf(domI),.25,.55), .1);
+  const deep2 = hslToRgb(hueOf(secI), clamp(satOf(secI),.25,.55), .19);
+  const pop = hslToRgb(hueOf(popI), clamp(satOf(popI),.58,.9), clamp(hsl[popI][2],.55,.66));
+  const pop2 = hslToRgb(hueOf(pop2I), clamp(satOf(pop2I),.5,.85), clamp(hsl[pop2I][2],.5,.62));
+  const tint = hslToRgb(hueOf(pop2I), .4, .9);
+  const paper = [241*0.86 + pop[0]*0.14, 226*0.86 + pop[1]*0.14, 182*0.86 + pop[2]*0.14];
+  return {
+    "--s-deep1": hex(deep1), "--s-deep2": hex(deep2), "--s-pop": hex(pop), "--s-pop2": hex(pop2), "--s-tint": hex(tint),
+    "--s-onpop": inkOn(pop), "--s-onpop2": inkOn(pop2), "--s-ontint": "#14110C", "--s-tagpaper": hex(paper), "--s-ink":"#FFFFFF"
+  };
+}
+
+function haversine(a,b){ const R=6371, t=x=>x*Math.PI/180; const dl=t(b.lat-a.lat), dg=t(b.lng-a.lng); const s=Math.sin(dl/2)**2+Math.cos(t(a.lat))*Math.cos(t(b.lat))*Math.sin(dg/2)**2; return 2*R*Math.asin(Math.sqrt(s)); }
+
+function buildReport(photos, videos, tripName, isExample){
+  const total = photos.length;
+  const dated = photos.filter(p => p.date);
+  const useTime = dated.length >= 6 && dated.length / total >= .5;
+  const seq = photos.slice().sort((a,b) => { if (a.date && b.date) return a.date - b.date; if (a.date) return -1; if (b.date) return 1; return a.idx - b.idx; });
+  seq.forEach((p,i) => p.ord = i);
+
+  // quality: sharpness, colour, contrast, exposure
+  const zs = (arr) => { const m = arr.reduce((a,b)=>a+b,0)/arr.length; const sd = Math.sqrt(arr.reduce((a,b)=>a+(b-m)**2,0)/arr.length) || 1; return v => (v-m)/sd; };
+  const zS = zs(photos.map(p => Math.log(p.lap+1))), zC = zs(photos.map(p => p.colourful)), zK = zs(photos.map(p => p.std));
+  photos.forEach(p => { p.dark = p.mean < 38; p.q = .5*zS(Math.log(p.lap+1)) + .3*zC(p.colourful) + .2*zK(p.std) - ((p.mean < 45 || p.mean > 228) ? 1.2 : 0); });
+  const medLap = median(photos.filter(p => !p.dark).map(p => p.lap));
+  photos.forEach(p => { p.blurry = !p.dark && p.lap < Math.min(.28*medLap, 140); });
+
+  // near-duplicates: compare each photo with the 8 before it in shooting order
+  const parent = seq.map((_,i)=>i); const find = i => parent[i]===i ? i : (parent[i] = find(parent[i]));
+  for (let i=1; i<seq.length; i++) for (let j=Math.max(0,i-8); j<i; j++){
+    const a = seq[i], b = seq[j];
+    if (a.date && b.date && Math.abs(a.date-b.date) > 20*60000) continue;
+    if (ham(a.hash, b.hash) <= 10){ const ra=find(i), rb=find(j); if (ra!==rb) parent[ra]=rb; }
+  }
+  const groups = new Map(); seq.forEach((p,i) => { const r = find(i); if (!groups.has(r)) groups.set(r, []); groups.get(r).push(p); });
+  const reps = [...groups.values()].map(g => g.slice().sort((a,b)=>b.q-a.q)[0]);
+  const dupes = total - reps.length;
+  const keepers = reps.filter(p => !p.blurry && !p.dark);
+  const blurryN = reps.filter(p => p.blurry).length;
+  const darkN = reps.filter(p => p.dark && !p.blurry).length;
+
+  // top picks, spread out in time
+  const ranked = keepers.slice().sort((a,b)=>b.q-a.q); const top = [];
+  for (const p of ranked){ if (top.length >= 5) break; if (useTime && p.date && top.some(t => t.date && Math.abs(t.date-p.date) < 40*60000)) continue; top.push(p); }
+  for (const p of ranked){ if (top.length >= 5) break; if (!top.includes(p)) top.push(p); }
+  const outtake = reps.filter(p => p.blurry && p.mean >= 45 && !top.includes(p)).sort((a,b)=>b.colourful-a.colourful)[0] || null;
+
+  // time stories
+  let hours = null, peak = null, burst = null, days = [], perDay = 0, minutesPer = null, firstDate = null, lastDate = null;
+  if (useTime){
+    const ds = seq.filter(p => p.date);
+    firstDate = ds[0].date; lastDate = ds[ds.length-1].date;
+    hours = new Array(24).fill(0); ds.forEach(p => hours[p.date.getHours()]++);
+    const ph = hours.indexOf(Math.max(...hours)); peak = { hour: ph, count: hours[ph], pct: Math.round(hours[ph]/ds.length*100) };
+    let j = 0, best = { n:0, i:0 };
+    for (let i=0; i<ds.length; i++){ while (j < ds.length && ds[j].date - ds[i].date <= 15*60000) j++; if (j-i > best.n) best = { n:j-i, i }; }
+    if (best.n >= 5){ const m = ds.slice(best.i, best.i+best.n); burst = { n: best.n, start: m[0].date, end: m[m.length-1].date, mins: Math.max(1, Math.round((m[m.length-1].date - m[0].date)/60000)), photos: m }; }
+    const byDay = new Map(); ds.forEach(p => { const k = dayKey(p.date); if (!byDay.has(k)) byDay.set(k, []); byDay.get(k).push(p); });
+    const d0 = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate());
+    days = [...byDay.values()].map(list => { const d = list[0].date; const dd = new Date(d.getFullYear(), d.getMonth(), d.getDate()); const best = list.filter(p => !p.blurry && !p.dark).sort((a,b)=>b.q-a.q)[0] || list[0]; return { date: dd, n: list.length, best, num: Math.round((dd - d0)/864e5) + 1 }; });
+    perDay = ds.length / days.length;
+    minutesPer = (days.length * 16 * 60) / ds.length;
+    if (burst){ burst.dayNum = Math.round((new Date(burst.start.getFullYear(),burst.start.getMonth(),burst.start.getDate()) - d0)/864e5) + 1; }
+  }
+
+  // colour
+  let pts = []; photos.forEach(p => { pts = pts.concat(p.samples); });
+  if (pts.length > 24000){ const R = mulberry(3); const keep = []; for (let i=0;i<24000;i++) keep.push(pts[Math.floor(R()*pts.length)]); pts = keep; }
+  const palette = kmeansPalette(pts, Math.min(5, Math.max(2, pts.length > 50 ? 5 : 3)));
+  const theme = themeFrom(palette);
+  const avgColour = photos.reduce((a,p)=>a+p.colourful,0) / total;
+
+  // route
+  let route = null; const geo = seq.filter(p => p.lat != null && p.lng != null && (p.lat || p.lng));
+  if (geo.length >= 3){
+    let km = 0; for (let i=1;i<geo.length;i++){ const d = haversine(geo[i-1], geo[i]); if (d < 1500) km += d; }
+    const spots = []; geo.forEach(p => { if (!spots.some(s => haversine(s,p) < 1)) spots.push({ lat:p.lat, lng:p.lng }); });
+    if (km >= 1) route = { km, spots: spots.length, pts: geo.map(p => ({ lat:p.lat, lng:p.lng })), n: geo.length };
+  }
+
+  // personality, scored only from what was measured
+  const share = (fn) => useTime ? seq.filter(p => p.date && fn(p.date.getHours())).length / dated.length : 0;
+  const sGold = share(h => h >= 16 && h <= 19), sEarly = share(h => h >= 5 && h <= 8), sNight = share(h => h >= 20 || h <= 3);
+  const sharpShare = keepers.length / total;
+  const scores = {
+    golden: sGold / .3,
+    early: sEarly / .16,
+    night: sNight / .24,
+    burst: burst ? (burst.n / total) / .16 : 0,
+    archivist: useTime ? perDay / 140 : total / 400,
+    curator: useTime && perDay > 0 ? (22 / perDay) * (sharpShare / .7) : 0,
+    colour: avgColour / 62,
+    explorer: route ? Math.max(route.spots / 6, route.km / 70) : 0,
+    story: 1
+  };
+  let persona = "story"; Object.entries(scores).forEach(([k,v]) => { if (v > scores[persona] + 1e-9) persona = k; });
+  const chips = [];
+  if (persona === "golden") chips.push(Math.round(sGold*100) + "% between 4 and 8 PM");
+  if (persona === "early") chips.push(Math.round(sEarly*100) + "% before 9 AM");
+  if (persona === "night") chips.push(Math.round(sNight*100) + "% after 8 PM");
+  if (persona === "burst" && burst) chips.push(burst.n + " photos in " + burst.mins + " min");
+  if (persona === "explorer" && route) chips.push(Math.round(route.km) + " km covered");
+  if (persona === "curator") chips.push(keepers.length + " keepers of " + total);
+  if (useTime) chips.push(Math.round(perDay) + " photos a day");
+  if (peak && persona !== "golden" && persona !== "early" && persona !== "night") chips.push("Peak at " + h12(peak.hour));
+  chips.push("Mostly " + palette[0].name);
+
+  const name = (tripName || "").trim() || (useTime ? (MON[firstDate.getMonth()][0] + MON[firstDate.getMonth()].slice(1).toLowerCase() + " trip") : "My trip");
+  const letters = name.toUpperCase().replace(/[^A-Z]/g, "");
+  const code = (letters.slice(0,3) || "TRP").padEnd(3, "X");
+  let range = "";
+  if (useTime){ const a = firstDate, b = lastDate; range = a.getMonth() === b.getMonth() && a.getFullYear() === b.getFullYear() ? (a.getDate() === b.getDate() ? a.getDate() + " " + MON[a.getMonth()] : a.getDate() + "–" + b.getDate() + " " + MON[a.getMonth()]) + " " + a.getFullYear() : a.getDate() + " " + MON[a.getMonth()] + " – " + b.getDate() + " " + MON[b.getMonth()] + " " + b.getFullYear(); }
+
+  return { isExample, name, code, range, total, videos, useTime, datedN: dated.length, hours, peak, burst, days, perDay, minutesPer, palette, theme, route, top, outtake, keepers, dupes, blurryN, darkN, reps, persona, chips, photos: seq };
+}
+
+/* ================= the story cards ================= */
+const img = (p, big) => `<img src="${esc(big && p.big ? p.big : p.thumb)}" alt="" draggable="false">`;
+function clockSVG(R){
+  const max = Math.max(...R.hours), cx = 150, cy = 150, r0 = 50, len = 80; let bars = "";
+  R.hours.forEach((n,h) => { const L = Math.max(3, n/max*len); const ang = h*15; const isPk = h === R.peak.hour;
+    bars += `<g transform="rotate(${ang} ${cx} ${cy})"><rect class="bar" style="--i:${h}" x="${cx-5}" y="${cy-r0-L}" width="10" height="${L}" rx="5" fill="${isPk ? "var(--s-pop)" : "currentColor"}" fill-opacity="${isPk ? 1 : .45}"></rect></g>`; });
+  const lab = (t, a) => { const rad = (a-90)*Math.PI/180, rr = r0 + len + 12; return `<text class="lbl" x="${cx + rr*Math.cos(rad)}" y="${cy + rr*Math.sin(rad) + 3}" text-anchor="middle">${t}</text>`; };
+  return `<svg viewBox="0 0 300 300" role="img" aria-label="Photos by hour of day, peak at ${h12(R.peak.hour)}">${bars}${lab("MIDNIGHT",0)}${lab("6 AM",90)}${lab("NOON",180)}${lab("6 PM",270)}
+    <text class="center-h" x="${cx}" y="${cy+12}" text-anchor="middle">${h12(R.peak.hour).replace(" ","")}</text><text class="center-s" x="${cx}" y="${cy+30}" text-anchor="middle">PEAK HOUR</text></svg>`;
+}
+function clockLine(h){
+  if (h >= 5 && h <= 8) return "You were up before the crowds.";
+  if (h >= 9 && h <= 11) return "Mornings were your moment.";
+  if (h >= 12 && h <= 15) return "Peak sun, peak shooting.";
+  if (h >= 16 && h <= 19) return "Golden hour hit different.";
+  if (h >= 20 && h <= 23) return "The trip got better after dark.";
+  return "Some of your best shots happened after midnight.";
+}
+function routeSVG(R){
+  const pts = R.route.pts; const lat0 = pts.reduce((a,p)=>a+p.lat,0)/pts.length; const k = Math.cos(lat0*Math.PI/180);
+  const xs = pts.map(p => p.lng*k), ys = pts.map(p => -p.lat);
+  const minx = Math.min(...xs), maxx = Math.max(...xs), miny = Math.min(...ys), maxy = Math.max(...ys);
+  const W = 300, H = 260, pad = 18; const s = Math.min((W-2*pad)/((maxx-minx)||1e-6), (H-2*pad)/((maxy-miny)||1e-6));
+  const ox = (W - (maxx-minx)*s)/2, oy = (H - (maxy-miny)*s)/2;
+  const P = pts.map((p,i) => [ox + (xs[i]-minx)*s, oy + (ys[i]-miny)*s]);
+  let dpath = "M" + P.map(p => p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" L");
+  let L = 0; for (let i=1;i<P.length;i++) L += Math.hypot(P[i][0]-P[i-1][0], P[i][1]-P[i-1][1]);
+  const dots = P.filter((p,i) => i===0 || i===P.length-1 || Math.hypot(p[0]-P[i-1][0], p[1]-P[i-1][1]) > 14).map(p => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.4"></circle>`).join("");
+  return `<svg viewBox="0 0 300 260" role="img" aria-label="Route drawn from photo locations"><path d="${dpath}" style="--len:${Math.ceil(L)+2}"></path>${dots}</svg>`;
+}
+
+function buildCards(R){
+  const C = [];
+  const ex = R.isExample;
+  const mos = R.reps.slice().sort((a,b)=>b.q-a.q).slice(0,16);
+  C.push({ id:"intro", tone:"deep", dur:5.5, html: `
+    <div class="mosaic" aria-hidden="true">${mos.map(p=>img(p)).join("")}</div><div class="intro-shade" aria-hidden="true"></div>
+    <p class="k a" style="--d:.1s">${ex ? "Example trip" : "Trip report"}</p>
+    <div class="title"><h2 class="huge a" style="--d:.25s">${esc(R.name)},</h2><p class="ser a" style="--d:.55s">unpacked.</p></div>
+    <div class="tagline a" style="--d:.8s">${R.range ? `<span>${esc(R.range)}</span>` : ""}${R.useTime ? `<span>${R.days.length} day${R.days.length>1?"s":""}</span>` : ""}<span>${R.total} photos</span></div>` });
+
+  const minutes = R.minutesPer ? (R.minutesPer < 1 ? "more than one a minute while you were awake" : "one every " + Math.round(R.minutesPer) + " minute" + (Math.round(R.minutesPer) === 1 ? "" : "s") + " you were awake") : null;
+  C.push({ id:"count", tone:"pop", dur:5, html: `
+    <p class="k a">You took</p>
+    <p class="huge a" style="--d:.15s" data-count="${R.total}">${R.total}</p>
+    <p class="unit a" style="--d:.3s">photos</p>
+    <p class="sub a" style="--d:.6s">${R.useTime ? `In ${R.days.length} day${R.days.length>1?"s":""}. That's ${minutes}.` : "Your photos had no dates, so this recap skips the timeline."}</p>
+    ${R.videos.n ? `<p class="vid a" style="--d:.8s">+ ${R.videos.n} video${R.videos.n>1?"s":""}${R.videos.secs ? ", " + fmtDur(R.videos.secs) + " of footage" : ""}</p>` : ""}` });
+
+  if (R.useTime && R.peak){
+    C.push({ id:"clock", tone:"deep", dur:6, html: `
+      <p class="k a">Your trip, by the hour</p>
+      <div class="clock a" style="--d:.1s">${clockSVG(R)}</div>
+      <p class="ser clock-line a" style="--d:.9s">${clockLine(R.peak.hour)}</p>
+      <p class="sub a" style="--d:1.1s">${R.peak.pct}% of your photos were taken between ${h12(R.peak.hour)} and ${h12((R.peak.hour+1)%24)}.</p>` });
+  }
+  if (R.burst){
+    const b = R.burst; const fan = b.photos.slice().sort((x,y)=>y.q-x.q).slice(0,6);
+    const pos = [[-14,-6,-12],[12,-8,9],[-6,4,-4],[16,6,13],[-18,8,-15],[2,-2,3]];
+    C.push({ id:"burst", tone:"deep", dur:6, html: `
+      <p class="k a">The moment you couldn't stop shooting</p>
+      <div class="fan" aria-hidden="true">${fan.map((p,i) => `<img src="${esc(p.thumb)}" alt="" style="--i:${i};--x:${pos[i][0]}cqw;--y:${pos[i][1]}cqh;--r:${pos[i][2]}deg">`).join("")}</div>
+      <p class="huge a" style="--d:.9s">${b.n} photos</p><p class="ser a" style="--d:1s">in ${b.mins} minute${b.mins>1?"s":""}.</p>
+      <p class="stamp a" style="--d:1.15s">Day ${b.dayNum} · ${DOW[b.start.getDay()]} ${b.start.getDate()} ${MON[b.start.getMonth()]} · ${hm(b.start)}</p>
+      <p class="sub a" style="--d:1.3s">Whatever was happening right then, it was worth it.</p>` });
+  }
+  C.push({ id:"colour", tone:"deep", dur:6, html: `
+    <p class="k a">Your trip in colour</p>
+    <div class="palbar" aria-hidden="true">${R.palette.map((p,i)=>`<i style="--i:${i};width:${p.pct}%;background:${p.hex}"></i>`).join("")}</div>
+    <ul class="pal-list">${R.palette.map((p,i)=>`<li class="a" style="--d:${.5+i*.12}s"><span class="sw" style="background:${p.hex}"></span><span class="nm">${esc(p.name)}</span><span class="pc">${p.pct}%</span></li>`).join("")}</ul>
+    <p class="sub a grow" style="--d:1.2s;margin-top:4cqh">Mixed from every pixel you shot. This whole recap is painted with them.</p>` });
+  if (R.route){
+    C.push({ id:"route", tone:"deep", dur:6, html: `
+      <p class="k a">Where you went</p>
+      <div class="route">${routeSVG(R)}</div>
+      <p class="huge a" style="--d:.6s">${Math.round(R.route.km)} km</p>
+      <p class="sub a" style="--d:.8s">across ${R.route.spots} spot${R.route.spots>1?"s":""}. Drawn from ${R.route.n} photos that kept their location.</p>` });
+  }
+  if (R.useTime && R.days.length >= 2){
+    let list = R.days.slice(); if (list.length > 6) list = list.slice().sort((a,b)=>b.n-a.n).slice(0,6).sort((a,b)=>a.date-b.date);
+    const mx = Math.max(...R.days.map(d=>d.n)); const big = R.days.find(d => d.n === mx);
+    const mn = Math.min(...R.days.map(d=>d.n)); const tied = R.days.filter(d => d.n === mx).length > 1 || (mx - mn) <= Math.max(1, mx*.1);
+    C.push({ id:"days", tone:"tint", dur:6, html: `
+      <p class="k a">Day by day</p>
+      <ul class="days">${list.map((d,i)=>`<li class="a ${d===big && !tied?"big":""}" style="--d:${.15+i*.1}s;--i:${i}">${img(d.best)}<div><span class="lab">Day ${d.num} · ${DOW[d.date.getDay()]} ${d.date.getDate()} ${MON[d.date.getMonth()]}</span><div class="track"><i style="--w:${Math.round(d.n/mx*100)}%"></i></div></div><span class="n">${d.n}</span></li>`).join("")}</ul>
+      <p class="ser days-foot a" style="--d:1.1s">${tied ? "Every day pulled its weight." : "Day " + big.num + " was the big one."}</p>` });
+  }
+  if (R.top.length >= 3){
+    const [one, ...rest] = R.top; const n = R.top.length;
+    C.push({ id:"top", tone:"deep", dur:8, html: `
+      <p class="k a">Your top ${n}</p>
+      <div class="top5">
+        ${rest.slice().reverse().map((p,i)=>`<figure class="rest pop" style="--d:${.3+i*.45}s"><figcaption>#${n-i}</figcaption>${img(p)}</figure>`).join("")}
+        <figure class="one pop" style="--d:${.3+rest.length*.45+.2}s"><figcaption>#1</figcaption>${img(one,true)}<span class="theone">The one.</span><span class="fr">FR. ${String(one.ord+1).padStart(4,"0")}</span></figure>
+      </div>
+      <p class="sub top5-note a" style="--d:${.6+rest.length*.45}s">Ranked from ${R.total} for sharpness, light and colour, with near-copies removed.</p>` });
+  }
+  if (R.outtake){
+    C.push({ id:"outtake", tone:"pop2", dur:5, html: `
+      <p class="k a">The one you almost deleted</p>
+      <div class="shot pop" style="--d:.2s">${img(R.outtake,true)}<span>blurry, chaotic</span></div>
+      <p class="ser a" style="--d:.7s">Probably the best memory.</p>` });
+  }
+  const pk = R.keepers.length, tot = R.total;
+  C.push({ id:"cull", tone:"tint", dur:6, html: `
+    <p class="k a">We went through all of it</p>
+    <p class="huge a" style="--d:.15s">${tot} in.</p><p class="ser a" style="--d:.35s;font-size:13cqw">${pk} keeper${pk===1?"":"s"}.</p>
+    <div class="stack">
+      ${[["Keepers",pk,"keep"],["Near-copies",R.dupes,""],["Blurry",R.blurryN,""],["Too dark",R.darkN,""]].filter(r=>r[1]>0 || r[2]).map((r,i)=>`<div class="row ${r[2]} a" style="--d:${.4+i*.12}s;--i:${i}"><b>${r[0]}</b><span>${r[1]}</span><div class="meter"><i style="--w:${Math.max(1.5,r[1]/tot*100)}%"></i></div></div>`).join("")}
+    </div>
+    <p class="sub a grow" style="--d:1s;margin-top:4cqh">Your Instagram kit is built only from the keepers.</p>` });
+  const P = PERSONAS[R.persona];
+  C.push({ id:"persona", tone:"pop", dur:6.5, html: `
+    <p class="k a">Your trip personality</p>
+    <h2 class="huge a" style="--d:.2s">${esc(P.name)}</h2>
+    <p class="ser a" style="--d:.6s">“${esc(P.line)}”</p>
+    <p class="sub a" style="--d:.8s">${esc(P.gloss)}</p>
+    <div class="chips a" style="--d:1s">${R.chips.slice(0,3).map(c=>`<span>${esc(c)}</span>`).join("")}</div>` });
+  const hero = R.top[0] || R.reps[0];
+  C.push({ id:"summary", tone:"deep", dur:7, end:true, html: `
+    <div class="tag">
+      <div class="row1"><span class="code">${esc(R.code)}</span><span class="meta">${R.isExample ? "Example<br>" : ""}${esc(R.range || "")}<br>Nostalgia</span></div>
+      ${hero ? `<img class="hero" src="${esc(hero.big || hero.thumb)}" alt="">` : ""}
+      <p class="name">${esc(R.name)}</p>
+      <div class="grid"><div><small>Photos</small><b>${R.total}</b></div><div><small>Days</small><b>${R.useTime ? R.days.length : "–"}</b></div><div><small>Peak</small><b>${R.peak ? h12(R.peak.hour).replace(" ","") : "–"}</b></div><div><small>Keepers</small><b>${pk}</b></div></div>
+      <div class="who"><b>${esc(P.name)}</b><span class="strip">${R.palette.map(p=>`<i style="width:${p.pct}%;background:${p.hex}"></i>`).join("")}</span></div>
+      <div class="foot"><span>nostalgia.</span><span>make yours</span></div>
+    </div>
+    <div class="endacts">
+      <button class="btn primary" type="button" data-act="kit">See your Instagram kit</button>
+      <div class="two"><button class="btn ghost" type="button" data-act="replay">Replay</button><button class="btn ghost" type="button" data-act="new">${R.isExample ? "Unpack mine" : "New trip"}</button></div>
+    </div>` });
+  return C;
+}
+
+function kitHTML(R){
+  const pics = R.top.concat(R.keepers.filter(p => !R.top.includes(p)).sort((a,b)=>b.q-a.q)).slice(0, 8);
+  const hero = R.top[0] || R.reps[0];
+  const slides = [
+    `<div class="slide cover">${hero ? `<img src="${esc(hero.big || hero.thumb)}" alt="">` : ""}<b>${esc(R.name)},</b><em>unpacked.</em><span class="n">1</span></div>`,
+    ...pics.map((p,i)=>`<div class="slide">${img(p, true)}<span class="n">${i+2}</span></div>`),
+    `<div class="slide stats"><span>${esc(R.range || "")}</span><div><b>${R.total}</b><span>photos${R.useTime ? " · " + R.days.length + " days" : ""}</span></div><span>${esc(PERSONAS[R.persona].name)}</span><span class="n">${pics.length+2}</span></div>`,
+    `<div class="slide end"><div><b>nostalgia<i>.</i></b><span>make yours</span></div><span class="n">${pics.length+3}</span></div>`
+  ];
+  return `<p class="lab">Ready to post</p><h3>Your Instagram kit</h3>
+    <p>Carousel, 4:5, ${slides.length} slides from your keepers. Swipe through:</p>
+    <div class="slides">${slides.join("")}</div>
+    <ul><li>Story set: every card in this recap, sized 9:16.</li><li>Recap Reel: the whole story as a short video, ready to post as a Reel.</li><li>Captions: three options in Hinglish or English, written from what is in your photos.</li><li>Tap Share and it all goes straight to Instagram or your family WhatsApp group. No screenshots.</li></ul>
+    <p class="lab">Demo preview: sharing works in the real app.</p>
+    <button class="btn" type="button" data-act="closekit">Back to my recap</button>`;
+}
+
+/* ================= player ================= */
+const player = $("#player"), phone = $("#phone"), cardsEl = $("#cards"), barsEl = $("#bars");
+let deck = [], cur = -1, report = null, lastFocus = null;
+
+function applyTheme(el, theme){ Object.entries(theme).forEach(([k,v]) => el.style.setProperty(k, v)); }
+function renderDeck(R){
+  report = R; deck = buildCards(R);
+  applyTheme(phone, R.theme);
+  cardsEl.innerHTML = deck.map((c,i)=>`<section class="card c-${c.id}" data-tone="${c.tone}" data-i="${i}" aria-hidden="true">${c.html}</section>`).join("");
+  barsEl.innerHTML = deck.map(c=>`<span style="--dur:${c.dur}s"><i></i></span>`).join("");
+  $("#chip").hidden = !R.isExample;
+  cur = -1;
+}
+function countUp(el){
+  const target = +el.dataset.count; if (!target || matchMedia("(prefers-reduced-motion: reduce)").matches){ el.textContent = target; return; }
+  const t0 = performance.now(), D = 1300;
+  const step = t => { const k = Math.min(1, (t-t0)/D); el.textContent = Math.round(target * (1 - Math.pow(1-k, 3))); if (k < 1 && el.isConnected) requestAnimationFrame(step); };
+  el.textContent = "0"; requestAnimationFrame(step);
+}
+function go(i){
+  if (!deck.length) return;
+  if (i < 0) i = 0; if (i >= deck.length) return;
+  const cards = cardsEl.children, bars = barsEl.children;
+  if (!bars[i] || !cards[i]) return;
+  [...cards].forEach((c,j) => { c.classList.toggle("on", j === i); c.setAttribute("aria-hidden", j === i ? "false" : "true"); });
+  [...bars].forEach((b,j) => { b.classList.remove("on","done"); if (j < i) b.classList.add("done"); });
+  void barsEl.offsetWidth;
+  bars[i].classList.add("on");
+  cur = i; player.classList.remove("paused");
+  cards[i].querySelectorAll("[data-count]").forEach(countUp);
+  const kit = phone.querySelector(".kit"); if (kit) kit.remove();
+}
+barsEl.addEventListener("animationend", e => { if (e.target.parentElement && e.target.parentElement.classList.contains("on") && !deck[cur].end) go(cur+1); });
+function openPlayer(R){
+  renderDeck(R); lastFocus = document.activeElement;
+  player.hidden = false; document.body.style.overflow = "hidden";
+  go(0); $("#closeBtn").focus({ preventScroll: true });
+}
+function closePlayer(){ deck = []; cur = -1; player.hidden = true; document.body.style.overflow = ""; cardsEl.innerHTML = ""; barsEl.innerHTML = ""; if (lastFocus) lastFocus.focus({ preventScroll:true }); }
+
+let downAt = 0, downX = 0, holdTimer = null, held = false;
+phone.addEventListener("pointerdown", e => {
+  if (e.target.closest("button, a, input, .kit, .slides")) return;
+  downAt = Date.now(); downX = e.clientX; held = false;
+  holdTimer = setTimeout(() => { held = true; player.classList.add("paused"); }, 220);
+});
+const endPress = e => {
+  if (!downAt) return;
+  if (!deck.length || cur < 0){ clearTimeout(holdTimer); downAt = 0; return; } clearTimeout(holdTimer); const wasHeld = held; downAt = 0;
+  if (wasHeld){ player.classList.remove("paused"); return; }
+  const r = phone.getBoundingClientRect(); const x = (downX - r.left) / r.width;
+  if (x < .3) go(cur-1); else if (!deck[cur].end) go(cur+1);
+};
+phone.addEventListener("pointerup", endPress);
+phone.addEventListener("pointercancel", () => { clearTimeout(holdTimer); downAt = 0; player.classList.remove("paused"); });
+phone.addEventListener("contextmenu", e => e.preventDefault());
+phone.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const act = b.dataset.act;
+  if (act === "replay") go(0);
+  if (act === "new"){ closePlayer(); $("#files").click(); }
+  if (act === "kit"){ const k = document.createElement("div"); k.className = "kit"; k.innerHTML = kitHTML(report); phone.appendChild(k); player.classList.add("paused"); k.querySelector("[data-act=closekit]").focus({preventScroll:true}); }
+  if (act === "closekit"){ const k = phone.querySelector(".kit"); if (k) k.remove(); player.classList.remove("paused"); }
+});
+$("#closeBtn").addEventListener("click", closePlayer);
+document.addEventListener("keydown", e => {
+  if (player.hidden) return;
+  if (e.key === "Escape"){ closePlayer(); return; }
+  if (!deck.length || cur < 0) return;
+  if (e.key === "Escape") closePlayer();
+  else if (e.key === "ArrowRight"){ if (!deck[cur].end) go(cur+1); }
+  else if (e.key === "ArrowLeft") go(cur-1);
+  else if (e.key === " " && !e.target.closest("button")){ e.preventDefault(); player.classList.toggle("paused"); }
+});
+
+/* ================= processing your photos ================= */
+function showError(msg){ const el = $("#err"); el.textContent = msg; el.hidden = !msg; }
+async function unpackFiles(fileList){
+  showError("");
+  const all = [...fileList];
+  const imgs = all.filter(f => /^image\//.test(f.type) || /\.(jpe?g|png|heic|heif|webp)$/i.test(f.name));
+  const vids = all.filter(f => /^video\//.test(f.type));
+  if (imgs.length < 6){ showError(imgs.length ? "Pick at least 6 photos from the trip. More is better: 40 to 400 works best." : "Those files are not photos this browser can read. Pick JPEG or iPhone photos from your camera roll."); return; }
+  const files = imgs.slice(0, 400);
+  const tripName = $("#tripName").value;
+
+  // open the stage in processing mode
+  lastFocus = document.activeElement; player.hidden = false; document.body.style.overflow = "hidden";
+  deck = []; cur = -1; cardsEl.innerHTML = ""; barsEl.innerHTML = ""; $("#chip").hidden = true;
+  const proc = document.createElement("div"); proc.className = "proc";
+  proc.innerHTML = `<p class="k">Unpacking</p><p class="huge" id="pN">0</p><p class="of">of ${files.length} photos</p><div class="sheet" id="sheet"></div><p class="stage-line" id="pStage">Reading dates and looking at every photo</p><div class="live"><span id="pDated">0 dated</span><span id="pVid">${vids.length ? vids.length + " videos" : ""}</span><span id="pSkip"></span></div>`;
+  cardsEl.appendChild(proc); $("#closeBtn").focus({preventScroll:true});
+  let cancelled = false; const onClose = () => { cancelled = true; }; $("#closeBtn").addEventListener("click", onClose, { once:true });
+
+  const photos = []; let done = 0, dated = 0, skipped = 0, next = 0;
+  const sheet = proc.querySelector("#sheet");
+  async function worker(){
+    while (next < files.length && !cancelled){
+      const idx = next++; const f = files[idx]; let url = null;
+      try {
+        const meta = await readMeta(f);
+        url = URL.createObjectURL(f); const im = await loadImg(url);
+        const w = im.naturalWidth, h = im.naturalHeight; if (!w || !h) throw new Error("size");
+        const a = analyzeDrawable(im, w, h);
+        const thumb = await toThumb(im, w, h, 360);
+        photos.push(Object.assign(a, { idx, file: f, thumb, date: meta.date || null, lat: meta.lat, lng: meta.lng }));
+        if (meta.date) dated++;
+        if (sheet.children.length < 48){ const t = document.createElement("img"); t.src = thumb; t.alt = ""; sheet.appendChild(t); }
+      } catch(e){ skipped++; }
+      finally { if (url) URL.revokeObjectURL(url); done++; }
+      proc.querySelector("#pN").textContent = done;
+      proc.querySelector("#pDated").textContent = dated + " dated";
+      if (skipped) proc.querySelector("#pSkip").textContent = skipped + " skipped";
+    }
+  }
+  await Promise.all([worker(), worker()]);
+  if (cancelled) return;
+  let vsecs = 0;
+  if (vids.length){ proc.querySelector("#pStage").textContent = "Timing your videos"; for (const v of vids.slice(0,60)) vsecs += await videoMeta(v); }
+  if (photos.length < 6){ closePlayer(); showError(skipped ? "This browser could not open most of these photos. On a computer, HEIC photos may not open: try on your phone, or export them as JPEG." : "Pick at least 6 photos."); return; }
+  proc.querySelector("#pStage").textContent = "Finding near-copies, bursts and your best shots";
+  await new Promise(r => setTimeout(r, 30));
+  const R = buildReport(photos, { n: vids.length, secs: vsecs }, tripName, false);
+  proc.querySelector("#pStage").textContent = "Mixing your trip's colours";
+  // sharper copies for the photos shown large
+  const big = new Set([...R.top, R.outtake].filter(Boolean));
+  for (const p of big){ try { const url = URL.createObjectURL(p.file); const im = await loadImg(url); p.big = await toThumb(im, im.naturalWidth, im.naturalHeight, 1080); URL.revokeObjectURL(url); } catch(e){} }
+  if (cancelled) return;
+  $("#closeBtn").removeEventListener("click", onClose);
+  renderDeck(R); go(0);
+}
+$("#files").addEventListener("change", e => { const fl = e.target.files; if (fl && fl.length) unpackFiles(fl); e.target.value = ""; });
+
+/* ================= the example trip (drawn, not photographed) ================= */
+function paintScene(kind, seed, phase){
+  const W = 480, H = 600; const c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d"); const R = mulberry(seed);
+  const grad = (y0,y1,stops) => { const g = x.createLinearGradient(0,y0,0,y1); stops.forEach(([o,col]) => g.addColorStop(o,col)); return g; };
+  const palm = (px, by, h, lean, col) => {
+    x.strokeStyle = col; x.lineWidth = 12; x.lineCap = "round"; x.beginPath(); x.moveTo(px, by); x.quadraticCurveTo(px + lean*.4, by - h*.5, px + lean, by - h); x.stroke();
+    x.fillStyle = col; const tx = px + lean, ty = by - h;
+    for (let i=0;i<7;i++){ const a = -Math.PI + i*(Math.PI/6) + (R()-.5)*.3; x.beginPath(); x.ellipse(tx + Math.cos(a)*42, ty + Math.sin(a)*22 + 10, 52, 11, a, 0, Math.PI*2); x.fill(); }
+  };
+  if (kind === "beach"){
+    x.fillStyle = grad(0,330,[[0,"#7FC2F0"],[1,"#E4F3FB"]]); x.fillRect(0,0,W,330);
+    x.fillStyle = "#FFFBE8"; x.beginPath(); x.arc(110 + R()*260, 90 + R()*40, 26, 0, 7); x.fill();
+    x.fillStyle = grad(320,430,[[0,"#1D8FB0"],[1,"#5FC9C8"]]); x.fillRect(0,320,W,110);
+    x.strokeStyle = "rgba(255,255,255,.75)"; x.lineWidth = 3; for (let i=0;i<4;i++){ x.beginPath(); const yy = 360 + i*18; for (let xx=0; xx<=W; xx+=20) x.lineTo(xx, yy + Math.sin(xx/30 + seed)*3); x.stroke(); }
+    x.fillStyle = grad(425,H,[[0,"#F1D9A8"],[1,"#E3BF83"]]); x.fillRect(0,425,W,H-425);
+    if (R() > .3){ const ux = 120 + R()*240; x.fillStyle = "#6B4A2B"; x.fillRect(ux-2, 430, 4, 90); for (let i=0;i<6;i++){ x.fillStyle = i%2 ? "#FFF3E0" : "#E2482F"; x.beginPath(); x.moveTo(ux, 410); x.lineTo(ux - 70 + i*23, 455); x.lineTo(ux - 47 + i*23, 455); x.closePath(); x.fill(); } }
+    palm(R() > .5 ? 60 : 420, 470, 300, R() > .5 ? 50 : -50, "#1F4D33");
+  } else if (kind === "sunset"){
+    x.fillStyle = grad(0,340,[[0,"#2A1A4E"],[.45,"#B6417A"],[.8,"#F0843A"],[1,"#FFD27A"]]); x.fillRect(0,0,W,340);
+    const sy = 300 + phase*36; x.fillStyle = "#FFE3A1"; x.beginPath(); x.arc(250 + (seed%5)*4, sy, 54, 0, 7); x.fill();
+    x.fillStyle = grad(330,H,[[0,"#5C2D58"],[1,"#1B1230"]]); x.fillRect(0,330,W,H-330);
+    x.fillStyle = "rgba(255,200,120,.55)"; for (let i=0;i<9;i++){ const yy = 345 + i*16; const w = 120 - i*10; x.fillRect(250 - w/2 + (R()-.5)*20, yy, w, 4); }
+    palm(80 + (seed%3)*6, 600, 380, 60, "#120B1E"); palm(430, 600, 300, -40, "#120B1E");
+  } else if (kind === "market"){
+    x.fillStyle = grad(0,H,[[0,"#0E1330"],[1,"#24163A"]]); x.fillRect(0,0,W,H);
+    for (let i=0;i<26;i++){ x.fillStyle = `rgba(${200+R()*55},${110+R()*80},${80+R()*60},.25)`; x.beginPath(); x.arc(R()*W, 120 + R()*260, 10 + R()*30, 0, 7); x.fill(); }
+    x.strokeStyle = "#3A2A1A"; x.lineWidth = 2; x.beginPath(); x.moveTo(0,90); x.quadraticCurveTo(W/2,170,W,90); x.stroke();
+    for (let i=0;i<14;i++){ const t = i/13; const lx = t*W; const ly = 90 + Math.sin(t*Math.PI)*58; x.fillStyle = "rgba(255,200,107,.35)"; x.beginPath(); x.arc(lx,ly,13,0,7); x.fill(); x.fillStyle = "#FFD27A"; x.beginPath(); x.arc(lx,ly,5,0,7); x.fill(); }
+    const cols = ["#C2462E","#2F6E8C","#D69A2B","#7A3F86"];
+    for (let i=0;i<4;i++){ const sx = i*125 - 10; x.fillStyle = cols[i]; x.beginPath(); x.moveTo(sx, 400); x.lineTo(sx+62, 340); x.lineTo(sx+125, 400); x.closePath(); x.fill(); x.fillStyle = "#1A1426"; x.fillRect(sx+10, 400, 105, 200); x.fillStyle = "rgba(255,190,90,.75)"; x.fillRect(sx+22, 420, 80, 44); }
+  } else if (kind === "food"){
+    x.fillStyle = "#6B3E26"; x.fillRect(0,0,W,H); for (let i=0;i<14;i++){ x.fillStyle = `rgba(0,0,0,${.05+R()*.08})`; x.fillRect(0, i*44 + R()*10, W, 3); }
+    x.fillStyle = "#F4F1EC"; x.beginPath(); x.arc(240,300,190,0,7); x.fill(); x.fillStyle = "#E3DED6"; x.beginPath(); x.arc(240,300,150,0,7); x.fill();
+    const bowls = [["#E9B23B",175,215],["#D9692B",300,205],["#5E8C3A",325,330],["#FBF7EF",205,350],["#B8322A",250,268]];
+    bowls.forEach(([col,bx,by],i) => { x.fillStyle = "#C9C2B6"; x.beginPath(); x.arc(bx+(R()-.5)*8,by+(R()-.5)*8,44,0,7); x.fill(); x.fillStyle = col; x.beginPath(); x.arc(bx,by,36,0,7); x.fill(); });
+    x.fillStyle = "#D8A659"; x.beginPath(); x.ellipse(120, 480, 70, 30, -.3, 0, 7); x.fill();
+  } else if (kind === "fort"){
+    x.fillStyle = grad(0,360,[[0,"#4AA3E0"],[1,"#BFE3F7"]]); x.fillRect(0,0,W,360);
+    for (let i=0;i<3;i++){ x.fillStyle = "rgba(255,255,255,.85)"; const cx = R()*W, cy = 60 + R()*120; x.beginPath(); x.ellipse(cx,cy,60,18,0,0,7); x.ellipse(cx+40,cy-10,40,16,0,0,7); x.fill(); }
+    x.fillStyle = "#2E6B8A"; x.fillRect(0, 300, W, 60);
+    x.fillStyle = "#B5562E"; x.fillRect(60, 210, 360, 180); for (let i=0;i<9;i++) x.fillRect(60 + i*42, 186, 24, 26);
+    x.fillStyle = "#8F3F21"; x.fillRect(200, 280, 80, 110); x.fillStyle = "#4A2214"; x.beginPath(); x.arc(240, 300, 26, Math.PI, 0); x.fill(); x.fillRect(214, 300, 52, 90);
+    x.fillStyle = grad(380,H,[[0,"#3E7A3A"],[1,"#24502A"]]); x.fillRect(0,380,W,H-380);
+  } else { // chai
+    x.fillStyle = grad(0,H,[[0,"#3B2417"],[1,"#7A4A2A"]]); x.fillRect(0,0,W,H);
+    for (let i=0;i<12;i++){ x.fillStyle = `rgba(255,${170+R()*60},${90+R()*50},.18)`; x.beginPath(); x.arc(R()*W, R()*260, 20 + R()*40, 0, 7); x.fill(); }
+    x.fillStyle = "rgba(255,255,255,.18)"; x.beginPath(); x.moveTo(160,250); x.lineTo(320,250); x.lineTo(300,520); x.lineTo(180,520); x.closePath(); x.fill();
+    x.fillStyle = grad(300,520,[[0,"#C98A4B"],[1,"#8C5228"]]); x.beginPath(); x.moveTo(165,300); x.lineTo(315,300); x.lineTo(300,515); x.lineTo(180,515); x.closePath(); x.fill();
+    x.fillStyle = "#E7C79A"; x.fillRect(165, 296, 150, 10);
+    x.strokeStyle = "rgba(255,255,255,.4)"; x.lineWidth = 5; x.lineCap = "round"; for (let i=0;i<3;i++){ x.beginPath(); x.moveTo(200 + i*40, 240); x.bezierCurveTo(180 + i*40, 200, 230 + i*40, 180, 205 + i*40, 130); x.stroke(); }
+    x.fillStyle = "#4E2E1C"; x.fillRect(0, 520, W, 80);
+  }
+  // film grain so sharpness reads like a real photo
+  const id = x.getImageData(0,0,W,H), d = id.data; for (let i=0;i<d.length;i+=4){ const n = (R()-.5)*26; d[i]+=n; d[i+1]+=n; d[i+2]+=n; } x.putImageData(id,0,0);
+  return c;
+}
+function blurCanvas(c){ const s = document.createElement("canvas"); s.width = 40; s.height = 50; s.getContext("2d").drawImage(c,0,0,40,50); const o = document.createElement("canvas"); o.width = c.width; o.height = c.height; const ox = o.getContext("2d"); ox.imageSmoothingQuality = "high"; ox.drawImage(s,0,0,o.width,o.height); return o; }
+
+function makeExample(){
+  const spots = { beach:[15.5440,73.7553], sunset:[15.5560,73.7510], market:[15.5700,73.7620], food:[15.4970,73.8278], fort:[15.4920,73.7730], chai:[15.5880,73.7420] };
+  const plan = [
+    [1,"11:52","food",0],[1,"12:31","beach",0],[1,"12:33","beach",0],[1,"15:10","beach",0],[1,"16:40","fort",0],
+    [1,"18:02","sunset",0],[1,"18:03","sunset",.05],[1,"18:04","sunset",.1],[1,"18:05","sunset",.15],[1,"18:06","sunset",.2],[1,"18:07","sunset",.3],[1,"18:08","sunset",.35],[1,"18:09","sunset",.4],[1,"18:10","sunset",.5],[1,"18:12","sunset",.6],[1,"18:13","sunset",.7],[1,"18:14","sunset",.8,"blur"],
+    [1,"20:40","market",0],[1,"20:44","market",0],[1,"21:15","market",0,"blur"],
+    [2,"07:35","chai",0],[2,"08:20","fort",0],[2,"08:24","fort",0],[2,"09:05","beach",0],[2,"13:10","food",0],[2,"13:12","food",0],
+    [2,"16:30","beach",0],[2,"17:05","beach",0],[2,"18:21","sunset",.2],[2,"18:24","sunset",.4],[2,"18:27","sunset",.6],[2,"18:31","sunset",.75],
+    [2,"21:30","market",0],[2,"22:05","market",0,"blur"],
+    [3,"08:50","chai",0],[3,"08:52","chai",0],[3,"10:20","beach",0],[3,"11:45","fort",0],[3,"12:40","food",0],[3,"13:05","food",0,"blur"]
+  ];
+  const photos = []; const R = mulberry(42);
+  plan.forEach(([day, t, kind, phase, fx], i) => {
+    const [hh, mm] = t.split(":").map(Number);
+    const date = new Date(2026, 9, 8 + day, hh, mm, Math.floor(R()*50));
+    const sameAsPrev = i > 0 && plan[i-1][2] === kind && Math.abs((hh*60+mm) - plan[i-1][1].split(":").reduce((a,b,j)=>a+(j?+b:+b*60),0)) <= 5;
+    const seed = sameAsPrev ? photos[photos.length-1].seed : 100 + i*17;
+    let c = paintScene(kind, seed, phase); if (fx === "blur") c = blurCanvas(c);
+    const a = analyzeDrawable(c, c.width, c.height);
+    const s = spots[kind]; const lat = s[0] + (R()-.5)*.004, lng = s[1] + (R()-.5)*.004;
+    photos.push(Object.assign(a, { idx:i, seed, date, lat, lng, thumb: c.toDataURL("image/jpeg", .82) }));
+  });
+  return buildReport(photos, { n:0, secs:0 }, "Goa with the gang", true);
+}
+
+/* ================= boot ================= */
+let example = null;
+function grainURL(){ const c = document.createElement("canvas"); c.width = c.height = 180; const x = c.getContext("2d"); const d = x.createImageData(180,180); for (let i=0;i<d.data.length;i+=4){ const v = Math.random()*255; d.data[i]=d.data[i+1]=d.data[i+2]=v; d.data[i+3]=255; } x.putImageData(d,0,0); return c.toDataURL("image/png"); }
+try { const g = grainURL(); document.querySelectorAll(".grain").forEach(el => el.style.backgroundImage = `url(${g})`); } catch(e){}
+function buildPreview(){
+  example = makeExample();
+  const pv = $("#previewPhone"); applyTheme(pv, example.theme);
+  const intro = buildCards(example)[0];
+  pv.innerHTML = `<section class="card c-intro on" data-tone="deep" aria-hidden="true">${intro.html}</section><div class="grain" aria-hidden="true"></div>`;
+  try { pv.querySelector(".grain").style.backgroundImage = document.querySelector("#phone .grain").style.backgroundImage; } catch(e){}
+}
+buildPreview();
+const playEx = () => openPlayer(example);
+$("#playExample").addEventListener("click", playEx);
+$("#previewBtn").addEventListener("click", playEx);
+$("#previewBtn").addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); playEx(); } });
+if (location.hash === "#play") setTimeout(playEx, 50);
+})();
+</script>
